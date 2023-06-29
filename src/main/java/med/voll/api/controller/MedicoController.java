@@ -3,6 +3,9 @@ package med.voll.api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,14 +26,19 @@ public class MedicoController {
 	@Autowired
 	private MedicoRepository repository;
 	
-	@GetMapping
-	public List<DadosListagemMedico> listar() {
+	@GetMapping("/all")
+	public List<DadosListagemMedico> listAll() {
 		return repository.findAll().stream().map(DadosListagemMedico::new).toList();
+	}
+	
+	@GetMapping
+	public Page<DadosListagemMedico> list(@PageableDefault(size = 10, sort = {"nome"}) Pageable pagination) {
+		return repository.findAll(pagination).map(DadosListagemMedico::new);
 	}
 	
 	@PostMapping
 	@Transactional
-	public void cadastrar(@RequestBody @Valid DadosCadastroMedico dados) {
+	public void rigester(@RequestBody @Valid DadosCadastroMedico dados) {
 		repository.save(new Medico(dados));
 	}
 }
