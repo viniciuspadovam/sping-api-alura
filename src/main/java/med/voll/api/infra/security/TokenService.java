@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 
 import med.voll.api.domain.user.User;
 
@@ -23,13 +24,30 @@ public class TokenService {
 		try {
 			Algorithm algorithm = Algorithm.HMAC256(secret);
 			
-			return JWT.create()
+			String token = JWT.create()
 					.withIssuer("API Voll.med")
 					.withSubject(user.getLogin())
 					.withExpiresAt(dateExpires())
 					.sign(algorithm);
+			
+			System.out.println(token);
+			
+			return token;
 		} catch (JWTCreationException e) {
 			throw new RuntimeException("erro ao gerar token jwt", e);
+		}
+	}
+	
+	public String getSubject(String token) {
+		try {
+			Algorithm algorithm = Algorithm.HMAC256(secret);
+		    return JWT.require(algorithm)
+		        .withIssuer("API Voll.med")
+		        .build()
+		        .verify(token)
+		        .getSubject();
+		} catch (JWTVerificationException exception){
+		    throw new RuntimeException("Token inválido ou expirado.");
 		}
 	}
 

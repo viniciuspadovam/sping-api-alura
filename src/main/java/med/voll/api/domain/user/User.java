@@ -18,7 +18,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Table(name = "users")
-@Entity(name = "User")
+@Entity(name = "Users")
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -38,7 +38,7 @@ public class User implements UserDetails {
 	}
 	@Override
 	public String getPassword() {
-		return getPassword();
+		return senha;
 	}
 	@Override
 	public String getUsername() {

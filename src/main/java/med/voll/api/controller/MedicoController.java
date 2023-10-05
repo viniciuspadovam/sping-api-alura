@@ -49,7 +49,7 @@ public class MedicoController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<DadosDetalhamentoMedico> register(@RequestBody @Valid DadosCadastroMedico dados, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<DadosDetalhamentoMedico> registerMedico(@RequestBody @Valid DadosCadastroMedico dados, UriComponentsBuilder uriBuilder) {
 		Medico medico = new Medico(dados);
 		
 		repository.save(medico);
